@@ -3,56 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:400,700">
-    <title>Countdown Timer</title>
+    <title>Re-Feed Day Countdown</title>
     <style>
         body {
-            background-color: black;
+            background-color: #1e1e1e;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            font-family: Arial, sans-serif;
         }
   
-        #timer {
-            color: #FF0000;
+        #timer-container {
             text-align: center;
-            text-transform: uppercase;
-            font-family: 'Merriweather', serif;
-            font-size: 0.7em;
-            letter-spacing: 3px;
         }
 
-        .weeks, .days, .hours {
-            display: inline-block;
-            padding: 15px;
-            width: 80px;
-            border-radius: 5px;
-            background: #333333;
+        h1 {
+            color: #a0a0a0;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #refeed-text {
+            color: #ffa500;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        #timer {
+            display: flex;
+            justify-content: center;
+        }
+
+        .time-block {
             margin: 0 5px;
         }
 
         .numbers {
-            font-family: 'Merriweather', serif;
-            color: #FF0000;
-            font-size: 3em;
+            background-color: #2a2a2a;
+            color: #ffa500;
+            font-size: 36px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            width: 40px;
+            display: inline-block;
             text-align: center;
-            font-weight: 700;
+        }
+
+        .labels {
+            color: #a0a0a0;
+            font-size: 12px;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
-    <div id="timer">
-        <div class="weeks"> 
-            <div id="weeks" class="numbers"></div>weeks
-        </div> 
-        <div class="days"> 
-            <div id="days" class="numbers"></div>days
-        </div> 
-        <div class="hours"> 
-            <div id="hours" class="numbers"></div>hours
-        </div> 
+    <div id="timer-container">
+        <h1>Order Inventory</h1>
+        <div id="refeed-text">🍰🍪🍔 Re-Feed Day!!! 🍔🍪🍰</div>
+        <div id="timer">
+            <div class="time-block">
+                <span id="days" class="numbers"></span>
+                <div class="labels">Days</div>
+            </div>
+            <div class="time-block">
+                <span id="hours" class="numbers"></span>
+                <div class="labels">Hours</div>
+            </div>
+            <div class="time-block">
+                <span id="minutes" class="numbers"></span>
+                <div class="labels">Minutes</div>
+            </div>
+            <div class="time-block">
+                <span id="seconds" class="numbers"></span>
+                <div class="labels">Seconds</div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -62,13 +91,15 @@
             const now = new Date().getTime();
             const diff = targetDate - now;
 
-            const weeks = Math.floor(diff / (1000 * 60 * 60 * 24 * 7));
-            const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 7)) / (1000 * 60 * 60 * 24));
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-            document.getElementById("weeks").innerHTML = weeks;
-            document.getElementById("days").innerHTML = days;
-            document.getElementById("hours").innerHTML = hours;
+            document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
         }
 
         setInterval(updateCountdown, 1000);

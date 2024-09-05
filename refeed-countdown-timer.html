@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:400,700">
+    <title>Countdown Timer</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+  
+        #timer {
+            color: #FF0000;
+            text-align: center;
+            text-transform: uppercase;
+            font-family: 'Merriweather', serif;
+            font-size: 0.7em;
+            letter-spacing: 3px;
+        }
+
+        .weeks, .days, .hours {
+            display: inline-block;
+            padding: 15px;
+            width: 80px;
+            border-radius: 5px;
+            background: #333333;
+            margin: 0 5px;
+        }
+
+        .numbers {
+            font-family: 'Merriweather', serif;
+            color: #FF0000;
+            font-size: 3em;
+            text-align: center;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div id="timer">
+        <div class="weeks"> 
+            <div id="weeks" class="numbers"></div>weeks
+        </div> 
+        <div class="days"> 
+            <div id="days" class="numbers"></div>days
+        </div> 
+        <div class="hours"> 
+            <div id="hours" class="numbers"></div>hours
+        </div> 
+    </div>
+
+    <script>
+        const targetDate = new Date('Sep 22, 2024 00:00:00');
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            const weeks = Math.floor(diff / (1000 * 60 * 60 * 24 * 7));
+            const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 7)) / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+            document.getElementById("weeks").innerHTML = weeks;
+            document.getElementById("days").innerHTML = days;
+            document.getElementById("hours").innerHTML = hours;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call to avoid delay
+    </script>
+</body>
+</html>

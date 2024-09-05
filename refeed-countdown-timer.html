@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Re-Feed Day Countdown</title>
+    <title>Order Inventory Countdown</title>
     <style>
         body {
             background-color: #1e1e1e;
@@ -20,16 +20,10 @@
         }
 
         h1 {
-            color: #a0a0a0;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        #refeed-text {
-            color: #ffa500;
-            font-size: 28px;
-            margin-bottom: 20px;
-            font-weight: bold;
+            color: #808080;
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: normal;
         }
 
         #timer {
@@ -38,69 +32,108 @@
         }
 
         .time-block {
-            margin: 0 5px;
+            margin: 0 4px;
         }
 
         .numbers {
             background-color: #2a2a2a;
             color: #ffa500;
-            font-size: 36px;
+            font-size: 28px;
             font-weight: bold;
-            padding: 10px;
-            border-radius: 5px;
-            width: 40px;
+            padding: 8px;
+            border-radius: 4px;
+            width: 30px;
             display: inline-block;
             text-align: center;
         }
 
         .labels {
-            color: #a0a0a0;
+            color: #808080;
             font-size: 12px;
             margin-top: 5px;
+        }
+
+        #resetButton {
+            background-color: #ffa500;
+            color: #1e1e1e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none;
         }
     </style>
 </head>
 <body>
     <div id="timer-container">
-        <h1>Order Inventory</h1>
-        <div id="refeed-text">🍰🍪🍔 Re-Feed Day!!! 🍔🍪🍰</div>
+        <h1>🍰🍪🍔 Re-Feed Day!!! 🍔🍪🍰</h1>
         <div id="timer">
             <div class="time-block">
-                <span id="days" class="numbers"></span>
+                <span id="days1" class="numbers"></span>
+                <span id="days2" class="numbers"></span>
                 <div class="labels">Days</div>
             </div>
             <div class="time-block">
-                <span id="hours" class="numbers"></span>
+                <span id="hours1" class="numbers"></span>
+                <span id="hours2" class="numbers"></span>
                 <div class="labels">Hours</div>
             </div>
             <div class="time-block">
-                <span id="minutes" class="numbers"></span>
+                <span id="minutes1" class="numbers"></span>
+                <span id="minutes2" class="numbers"></span>
                 <div class="labels">Minutes</div>
             </div>
             <div class="time-block">
-                <span id="seconds" class="numbers"></span>
+                <span id="seconds1" class="numbers"></span>
+                <span id="seconds2" class="numbers"></span>
                 <div class="labels">Seconds</div>
             </div>
         </div>
+        <button id="resetButton">Reset Timer</button>
     </div>
 
     <script>
-        const targetDate = new Date('Sep 22, 2024 00:00:00');
+        let targetDate = new Date('Sep 22, 2024 00:00:00');
 
         function updateCountdown() {
             const now = new Date().getTime();
             const diff = targetDate - now;
 
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            if (diff <= 0) {
+                // Timer has reached zero
+                document.getElementById("resetButton").style.display = "block";
+                // Set all digits to zero
+                updateElement("days", 0);
+                updateElement("hours", 0);
+                updateElement("minutes", 0);
+                updateElement("seconds", 0);
+            } else {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-            document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
-            document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
-            document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
-            document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
+                updateElement("days", days);
+                updateElement("hours", hours);
+                updateElement("minutes", minutes);
+                updateElement("seconds", seconds);
+            }
         }
+
+        function updateElement(id, value) {
+            const strValue = value.toString().padStart(2, '0');
+            document.getElementById(id + "1").innerHTML = strValue[0];
+            document.getElementById(id + "2").innerHTML = strValue[1];
+        }
+
+        document.getElementById("resetButton").addEventListener("click", function() {
+            // Set new target date (e.g., 30 days from now)
+            targetDate = new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000);
+            this.style.display = "none";
+            updateCountdown(); // Immediately update the display
+        });
 
         setInterval(updateCountdown, 1000);
         updateCountdown(); // Initial call to avoid delay
